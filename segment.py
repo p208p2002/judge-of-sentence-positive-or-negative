@@ -16,8 +16,8 @@ def main():
         for stopword in stopwords:
             stopword_set.add(stopword.strip('\n'))
 
-    output = open('wiki_seg.txt', 'w', encoding='utf-8')
-    with open('wiki_zh_tw.txt', 'r', encoding='utf-8') as content :
+    output = open('wikidata/wiki_seg.txt', 'w', encoding='utf-8')
+    with open('wikidata/wiki_zh_tw.txt', 'r', encoding='utf-8') as content :
         for texts_num, line in enumerate(content):
             line = line.strip('\n')
             words = jieba.cut(line, cut_all=False)

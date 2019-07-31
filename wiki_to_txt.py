@@ -15,7 +15,7 @@ def main():
     wiki_corpus = WikiCorpus(sys.argv[1], dictionary={})
     texts_num = 0
 
-    with open("wiki_texts.txt",'w',encoding='utf-8') as output:
+    with open("wikidata/wiki_texts.txt",'w',encoding='utf-8') as output:
         for text in wiki_corpus.get_texts():
             output.write(' '.join(text) + '\n')
             texts_num += 1
