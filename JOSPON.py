@@ -6,12 +6,17 @@ from gensim import models
 class JOSPON():
     def __init__(self):
         #
-        self.stopword_set = self.__loadStopWord()
+        # self.stopword_set = self.__loadStopWord()
+        self.stopword_set=set()
         self.model = models.Word2Vec.load('w2vmodel/word2vec.model')
         self.middleOfPostive, self.middleOfNegative = self.__loadRegulateFiles()
         self.postiveData, self.negativeData = self.__loadPNWords()
+        self.weightingWords = self.__loadWeightingWords()
+        self.opsiteWords = self.__loadOpsiteWords()
+        self.__weightingFlag = False
+        self.__opsiteFlag = False
         #
-        self.__initJieba()
+        self.__initJieba()        
 
     def compareSimilar(self, str_a, str_b):
         try:
@@ -32,7 +37,7 @@ class JOSPON():
             print(casePass)
             if(casePass == 'PASS'):
                 passCount += 1
-                print("**pass**")
+            print()
 
         print('正確率',passCount,'/',testCasesCount,passCount/testCasesCount)
 
@@ -49,11 +54,32 @@ class JOSPON():
                 pVal = self.compareSimilar(self.middleOfPostive,word)                
                 nVal = self.compareSimilar(self.middleOfNegative,word)
                 
-                # 加權
+                # 語氣字FLAG
+                if(self.__weightingFlag == False):
+                    weightVal = 1.5
+                elif(self.__weightingFlag == True):
+                    self.__weightingFlag = False
+                    weightVal = 2.0
+
+                # 反面字FLAG
+                if(self.__opsiteFlag == False):
+                    opFlag = 1
+                elif(self.__opsiteFlag == True):
+                    self.__opsiteFlag == False
+                    opFlag = -1
+                # 關鍵字加權
                 if word in self.postiveData:
-                    pVal = pVal*1.5
+                    pVal = pVal*weightVal*opFlag
                 elif word in self.negativeData:
-                    nVal = nVal*1.5
+                    nVal = nVal*weightVal*opFlag
+                
+                # 語氣字加權
+                if word in self.weightingWords:
+                    self.__weightingFlag = True
+                
+                # 反面字
+                if word in self.opsiteWords:
+                    self.__opsiteFlag = True
 
                 splitDataVal_postive.append(pVal)
                 splitDataVal_negative.append(nVal)
@@ -93,6 +119,18 @@ class JOSPON():
                 stopword_set.add(stopword.strip('\n'))
         return stopword_set
     
+    def __loadOpsiteWords(self, opsiteWordsPath = 'dict/opsitewords.txt'):
+        with open(opsiteWordsPath ,'r', encoding='utf-8') as f:
+            opsiteWords = f.read()
+        opsiteWords = opsiteWords.split()
+        return opsiteWords
+    
+    def __loadWeightingWords(self, weightingWordsPath = 'dict/weightingwords.txt'):
+        with open(weightingWordsPath ,'r', encoding='utf-8') as f:
+            weightingWords = f.read()
+        weightingWords = weightingWords.split()
+        return weightingWords
+        
     def __loadRegulateFiles(self, reuglateFilesPath = 'regulatefiles/regulate.txt'):
         with open(reuglateFilesPath ,'r',encoding='utf-8') as f:
             middleWord = f.read()
