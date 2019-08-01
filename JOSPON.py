@@ -4,10 +4,9 @@ from gensim import models
 
 
 class JOSPON():
-    def __init__(self):
+    def __init__(self,stopword_dict_path ='blacklists/words.txt'):
         #
-        # self.stopword_set = self.__loadStopWord()
-        self.stopword_set=set()
+        self.stopword_set = self.__loadStopWord(stopword_dict_path)
         self.model = models.Word2Vec.load('w2vmodel/word2vec.model')
         self.middleOfPostive, self.middleOfNegative = self.__loadRegulateFiles()
         self.postiveData, self.negativeData = self.__loadPNWords()
@@ -16,30 +15,40 @@ class JOSPON():
         self.__weightingFlag = False
         self.__opsiteFlag = False
         #
-        self.__initJieba()        
+        self.__initJieba()
+
+    def disableStopwords(self):
+        self.stopword_set = set()
 
     def compareSimilar(self, str_a, str_b):
         try:
             val = self.model.wv.similarity(str_a,str_b)
+            if(val < 0.0):
+                val = 0.0
         except:
             val = 0.0
         return val
     
-    def test(self, testFilePath = 'testcases/test.txt'):
+    def test(self, testFilePath = 'testcases/test.txt', hasAns=True):
         with open(testFilePath,'r',encoding='utf-8') as f:
             testCases = f.read()
         testCases = testCases.split('\n')
         testCasesCount = len(testCases)
         passCount = 0
-        for tc in testCases:
-            tc = tc.split(' ')
-            casePass = self.eval(tc[0],tc[1])
-            print('=>',casePass)
-            if(casePass == 'PASS'):
-                passCount += 1
-            print()
-
-        print('正確率',passCount,'/',testCasesCount,passCount/testCasesCount)
+        if(hasAns):
+            for tc in testCases:
+                tc = tc.split(' ')
+                casePass = self.eval(tc[0],tc[1])
+                print('=>',casePass)
+                if(casePass == 'PASS'):
+                    passCount += 1
+                print()
+            print('正確率',passCount,'/',testCasesCount,passCount/testCasesCount)
+        else:
+            for tc in testCases:
+                tc = tc.split(' ')
+                casePass = self.eval(tc[0])
+                print()
 
     def eval(self,targetSentence,ans=None):
         if(ans != None):
@@ -92,7 +101,10 @@ class JOSPON():
         self.__opsiteFlag = False
         self.__weightingFlag = False
         
-        print(targetSentence,ans)
+        if(ans != None):
+            print(targetSentence,ans)
+        else:
+            print(targetSentence)
         print(splitData)
         pSum = sum(splitDataVal_postive)*100
         nSum = sum(splitDataVal_negative)*100
@@ -121,7 +133,7 @@ class JOSPON():
         jieba.load_userdict(userDictPath)
         jieba.initialize()
     
-    def __loadStopWord(self, stopWordDictPath ='blacklists/words.txt'):
+    def __loadStopWord(self, stopWordDictPath):
         stopword_set = set()
         with open(stopWordDictPath ,'r', encoding='utf-8') as stopwords:
             for stopword in stopwords:
