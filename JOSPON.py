@@ -20,8 +20,8 @@ class JOSPON():
             val = 0.0
         return val
     
-    def test(self):
-        with open('testcases/test.txt','r',encoding='utf-8') as f:
+    def test(self, testFilePath = 'testcases/test.txt'):
+        with open(testFilePath,'r',encoding='utf-8') as f:
             testCases = f.read()
         testCases = testCases.split('\n')
         testCasesCount = len(testCases)
@@ -80,33 +80,33 @@ class JOSPON():
         print('正確率',passCount,'/',testCasesCount,passCount/testCasesCount)
         
         
-    def __initJieba(self):
+    def __initJieba(self, dictPath = 'dict/dict.txt.big'):
         # jieba字典
-        jieba.set_dictionary('dict/dict.txt.big')
+        jieba.set_dictionary(dictPath)
         jieba.initialize()
     
-    def __loadStopWord(self):
+    def __loadStopWord(self, stopWordDictPath ='blacklists/words.txt'):
         stopword_set = set()
-        with open('blacklists/words.txt','r', encoding='utf-8') as stopwords:
+        with open(stopWordDictPath ,'r', encoding='utf-8') as stopwords:
             for stopword in stopwords:
                 stopword_set.add(stopword.strip('\n'))
         return stopword_set
     
-    def __loadRegulateFiles(self):
-        with open('regulatefiles/regulate.txt','r',encoding='utf-8') as f:
+    def __loadRegulateFiles(self, reuglateFilesPath = 'regulatefiles/regulate.txt'):
+        with open(reuglateFilesPath ,'r',encoding='utf-8') as f:
             middleWord = f.read()
         middleWord = middleWord.split()
         middleOfPostive = middleWord[0]
         middleOfNegative = middleWord[1]
         return (middleOfPostive,middleOfNegative)
 
-    def __loadPNWords(self):
+    def __loadPNWords(self, positiveWordsDictPath = 'dict/positive_words.txt', negativeWordsDictPath = 'dict/negative_words.txt'):
         # 正面詞集
-        with open('dict/positive_words.txt','r',encoding='utf-8') as f:
+        with open(positiveWordsDictPath ,'r',encoding='utf-8') as f:
             data = f.read()
         postiveData = data.split()
         # 反面詞集
-        with open('dict/negative_words.txt','r',encoding='utf-8') as f:
+        with open(negativeWordsDictPath ,'r',encoding='utf-8') as f:
             data = f.read()
         negativeData = data.split()
         return (postiveData,negativeData)
