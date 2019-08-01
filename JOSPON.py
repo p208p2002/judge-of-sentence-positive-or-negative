@@ -46,7 +46,7 @@ class JOSPON():
             print('正確率',passCount,'/',testCasesCount,passCount/testCasesCount)
         else:
             for tc in testCases:
-                tc = tc.split(' ')
+                tc = tc.split('\n')
                 casePass = self.eval(tc[0])
                 print()
 
@@ -73,9 +73,15 @@ class JOSPON():
                     
                 # 關鍵字加權
                 if word in self.postiveData:
-                    pVal = pVal*weightVal
+                    if(pVal == 0.0):
+                        pVal = 0.5
+                    else:
+                        pVal = pVal*weightVal
                 elif word in self.negativeData:
-                    nVal = nVal*weightVal
+                    if(nVal == 0.0):
+                        nVal = 0.5
+                    else:
+                        nVal = nVal*weightVal
 
                 # 反面字FLAG，交換分數
                 if(self.__opsiteFlag == False):
@@ -113,15 +119,15 @@ class JOSPON():
         print("N:",nSum)
         print(splitDataVal_negative)
         if((pSum+nSum)*0.06 >= abs(pSum-nSum)): #差距小於總分的8%
-            print("中立",pSum-nSum)
+            print("=> 中立",pSum-nSum)
             if(ans == 0):
                 return 'PASS'
         elif(pSum>nSum):
-            print("正面",pSum-nSum)
+            print("=> 正面",pSum-nSum)
             if(ans == 1):
                 return 'PASS'
         else:
-            print("反面",pSum-nSum)
+            print("=> 反面",pSum-nSum)
             if(ans == -1):                
                 return 'PASS'
         return 'NO_PASS'
