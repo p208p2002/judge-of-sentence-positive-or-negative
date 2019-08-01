@@ -59,19 +59,22 @@ class JOSPON():
                     weightVal = 1.5
                 elif(self.__weightingFlag == True):
                     self.__weightingFlag = False
-                    weightVal = 2.0
-
-                # 反面字FLAG
-                if(self.__opsiteFlag == False):
-                    opFlag = 1
-                elif(self.__opsiteFlag == True):
-                    self.__opsiteFlag == False
-                    opFlag = -1
+                    weightVal = 2.0                
+                    
                 # 關鍵字加權
                 if word in self.postiveData:
-                    pVal = pVal*weightVal*opFlag
+                    pVal = pVal*weightVal
                 elif word in self.negativeData:
-                    nVal = nVal*weightVal*opFlag
+                    nVal = nVal*weightVal
+
+                # 反面字FLAG，交換分數
+                if(self.__opsiteFlag == False):
+                    pass
+                elif(self.__opsiteFlag == True):
+                    self.__opsiteFlag == False
+                    tmp = pVal
+                    pVal = nVal
+                    nVal = tmp
                 
                 # 語氣字加權
                 if word in self.weightingWords:
@@ -84,6 +87,10 @@ class JOSPON():
                 splitDataVal_postive.append(pVal)
                 splitDataVal_negative.append(nVal)
         
+        # flag 復位
+        self.__opsiteFlag = False
+        self.__weightingFlag = False
+        
         print(targetSentence,ans)
         print(splitData)
         pSum = sum(splitDataVal_postive)*100
@@ -92,7 +99,7 @@ class JOSPON():
         print(splitDataVal_postive)
         print("N:",nSum)
         print(splitDataVal_negative)
-        if((pSum+nSum)*0.07 >= abs(pSum-nSum)): #差距小於總分的8%
+        if((pSum+nSum)*0.06 >= abs(pSum-nSum)): #差距小於總分的8%
             print("中立",pSum-nSum)
             if(ans == 0):
                 return 'PASS'
