@@ -2,6 +2,11 @@ import jieba
 from gensim.models import word2vec
 from gensim import models
 
+
+class JOSPON():
+    def __init__(self):
+    
+
 def compareSimilar(str_a,str_b):
     try:
         val = model.wv.similarity(str_a,str_b)
@@ -15,9 +20,9 @@ if __name__ == "__main__":
 
     # 停用詞表
     stopword_set = set()
-    with open('blacklists/words.txt','r', encoding='utf-8') as stopwords:
-        for stopword in stopwords:
-            stopword_set.add(stopword.strip('\n'))    
+    # with open('blacklists/words.txt','r', encoding='utf-8') as stopwords:
+    #     for stopword in stopwords:
+    #         stopword_set.add(stopword.strip('\n'))    
     
     jieba.initialize()
 
@@ -82,7 +87,7 @@ if __name__ == "__main__":
         print(splitDataVal_postive)
         print("N:",nSum)
         print(splitDataVal_negative)
-        if((pSum+nSum)*0.06 >= abs(pSum-nSum)): #差距小於總分的8%
+        if((pSum+nSum)*0.07 >= abs(pSum-nSum)): #差距小於總分的8%
             print("中立",pSum-nSum)
             if(ans == 0):
                 passCount += 1
