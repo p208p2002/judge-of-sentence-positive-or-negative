@@ -28,56 +28,57 @@ class JOSPON():
         passCount = 0
         for tc in testCases:
             tc = tc.split(' ')
-            try:
-                ans = int(tc[1])
-            except:
-                ans = 0
-            tc = tc[0]
-            words = jieba.cut(tc, cut_all=False)
-            splitData = []
-            splitDataVal_postive = []
-            splitDataVal_negative = []
-            for word in words:
-                if not word in self.stopword_set:
-                    splitData.append(word)
-                    pVal = self.compareSimilar(self.middleOfPostive,word)                
-                    nVal = self.compareSimilar(self.middleOfNegative,word)
-                    
-                    # 加權
-                    if word in self.postiveData:
-                        pVal = pVal*1.5
-                    elif word in self.negativeData:
-                        nVal = nVal*1.5
+            casePass = self.eval(tc[0],tc[1])
+            print(casePass)
+            if(casePass == 'PASS'):
+                passCount += 1
+                print("**pass**")
 
-                    splitDataVal_postive.append(pVal)
-                    splitDataVal_negative.append(nVal)
-            
-            print(tc,ans)
-            print(splitData)
-            pSum = sum(splitDataVal_postive)*100
-            nSum = sum(splitDataVal_negative)*100
-            print("P:",pSum)
-            print(splitDataVal_postive)
-            print("N:",nSum)
-            print(splitDataVal_negative)
-            if((pSum+nSum)*0.07 >= abs(pSum-nSum)): #差距小於總分的8%
-                print("中立",pSum-nSum)
-                if(ans == 0):
-                    passCount += 1
-                    print("**pass**")
-            elif(pSum>nSum):
-                print("正面",pSum-nSum)
-                if(ans == 1):
-                    passCount += 1
-                    print("**pass**")
-            else:
-                print("反面",pSum-nSum)
-                if(ans == -1):
-                    passCount += 1
-                    print("**pass**")
-            print("\n")
-        #
         print('正確率',passCount,'/',testCasesCount,passCount/testCasesCount)
+
+    def eval(self,targetSentence,ans=None):
+        if(ans != None):
+            ans = int(ans)
+        words = jieba.cut(targetSentence, cut_all=False)
+        splitData = []
+        splitDataVal_postive = []
+        splitDataVal_negative = []
+        for word in words:
+            if not word in self.stopword_set:
+                splitData.append(word)
+                pVal = self.compareSimilar(self.middleOfPostive,word)                
+                nVal = self.compareSimilar(self.middleOfNegative,word)
+                
+                # 加權
+                if word in self.postiveData:
+                    pVal = pVal*1.5
+                elif word in self.negativeData:
+                    nVal = nVal*1.5
+
+                splitDataVal_postive.append(pVal)
+                splitDataVal_negative.append(nVal)
+        
+        print(targetSentence,ans)
+        print(splitData)
+        pSum = sum(splitDataVal_postive)*100
+        nSum = sum(splitDataVal_negative)*100
+        print("P:",pSum)
+        print(splitDataVal_postive)
+        print("N:",nSum)
+        print(splitDataVal_negative)
+        if((pSum+nSum)*0.07 >= abs(pSum-nSum)): #差距小於總分的8%
+            print("中立",pSum-nSum)
+            if(ans == 0):
+                return 'PASS'
+        elif(pSum>nSum):
+            print("正面",pSum-nSum)
+            if(ans == 1):
+                return 'PASS'
+        else:
+            print("反面",pSum-nSum)
+            if(ans == -1):                
+                return 'PASS'
+        return 'NO_PASS'
         
         
     def __initJieba(self, dictPath = 'dict/dict.txt.big'):
