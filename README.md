@@ -8,6 +8,7 @@ mid_correction.py    |中心字校正                |
 main.py              |主程式，句子正反面情緒判斷  |
 testcase.py          |大量案例測試用             |
 # 準備
+[下載必要檔案](https://github.com/p208p2002/judge-of-sentence-positive-or-negative/releases)，放到對應名稱的資料夾底下
 
 # 測試
 - -1 負面答案
