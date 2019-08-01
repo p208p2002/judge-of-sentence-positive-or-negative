@@ -34,7 +34,7 @@ class JOSPON():
         for tc in testCases:
             tc = tc.split(' ')
             casePass = self.eval(tc[0],tc[1])
-            print(casePass)
+            print('=>',casePass)
             if(casePass == 'PASS'):
                 passCount += 1
             print()
@@ -54,12 +54,13 @@ class JOSPON():
                 pVal = self.compareSimilar(self.middleOfPostive,word)                
                 nVal = self.compareSimilar(self.middleOfNegative,word)
                 
-                # 語氣字FLAG
-                if(self.__weightingFlag == False):
-                    weightVal = 1.5
-                elif(self.__weightingFlag == True):
+                # 語氣字FLAG                
+                if(self.__weightingFlag == True and (pVal != 0.0 or nVal != 0.0)):
                     self.__weightingFlag = False
-                    weightVal = 2.0                
+                    weightVal = 2.0
+                elif(self.__weightingFlag == False):
+                    weightVal = 1.5
+
                     
                 # 關鍵字加權
                 if word in self.postiveData:
@@ -70,7 +71,7 @@ class JOSPON():
                 # 反面字FLAG，交換分數
                 if(self.__opsiteFlag == False):
                     pass
-                elif(self.__opsiteFlag == True):
+                elif(self.__opsiteFlag == True and (pVal != 0.0 or nVal != 0.0)):
                     self.__opsiteFlag == False
                     tmp = pVal
                     pVal = nVal
@@ -114,9 +115,10 @@ class JOSPON():
         return 'NO_PASS'
         
         
-    def __initJieba(self, dictPath = 'dict/dict.txt.big'):
+    def __initJieba(self, dictPath = 'dict/dict.txt.big', userDictPath = 'dict/my_dict'):
         # jieba字典
         jieba.set_dictionary(dictPath)
+        jieba.load_userdict(userDictPath)
         jieba.initialize()
     
     def __loadStopWord(self, stopWordDictPath ='blacklists/words.txt'):
