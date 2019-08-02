@@ -1,14 +1,21 @@
 # Judge of sentence positive or negative
 判斷語句的正反面情緒
+
+# 使用套件
+- [fxsjy/jieba](https://github.com/fxsjy/jieba)
+- [RaRe-Technologies/gensim](https://github.com/RaRe-Technologies/gensim)
+
 # 檔案描述
-File name            |descripition             |
+Name                 |Descripition             |
 ---------------------|-------------------------|
-JOSPON.py            |核心程式邏輯              |
-mid_correction.py    |中心字校正                |
+JOSPON.py            |程式核心邏輯              |
+mid_correction.py    |中心字校正(中心字用於與其斷詞比對)|
 main.py              |主程式，句子正反面情緒判斷  |
 testcase.py          |大量案例測試用             |
+testcase_no_ans.py   |大量案例測試用，無須答案    |
+
 # 準備
-[下載必要檔案](https://github.com/p208p2002/judge-of-sentence-positive-or-negative/releases)，放到對應名稱的資料夾底下
+- [下載必要檔案](https://github.com/p208p2002/judge-of-sentence-positive-or-negative/releases)，放到對應名稱的資料夾底下
 
 # 測試
 - -1 負面答案
