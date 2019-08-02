@@ -4,7 +4,7 @@ from gensim import models
 
 
 class JOSPON():
-    def __init__(self,stopword_dict_path ='blacklists/words.txt'):
+    def __init__(self,stopword_dict_path ='dict/stopwords'):
         #
         self.stopword_set = self.__loadStopWord(stopword_dict_path)
         self.model = models.Word2Vec.load('w2vmodel/word2vec.model')

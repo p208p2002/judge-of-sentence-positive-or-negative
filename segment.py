@@ -12,7 +12,7 @@ def main():
 
     # load stopwords set
     stopword_set = set()
-    with open('blacklists/words.txt','r', encoding='utf-8') as stopwords:
+    with open('dict/stopwords','r', encoding='utf-8') as stopwords:
         for stopword in stopwords:
             stopword_set.add(stopword.strip('\n'))
 
