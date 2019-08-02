@@ -4,3 +4,4 @@ if __name__ == "__main__":
     while(True):
         sentense = input('輸入句子: ')
         jospon.eval(sentense)
+        print()

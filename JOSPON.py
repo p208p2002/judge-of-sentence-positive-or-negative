@@ -73,15 +73,15 @@ class JOSPON():
                     
                 # 關鍵字加權
                 if word in self.postiveData:
-                    if(pVal == 0.0):
+                    if(pVal < 0.5):
                         pVal = 0.5
-                    else:
-                        pVal = pVal*weightVal
+                    # else:
+                    pVal = pVal*weightVal
                 elif word in self.negativeData:
-                    if(nVal == 0.0):
+                    if(nVal <= 0.5):
                         nVal = 0.5
-                    else:
-                        nVal = nVal*weightVal
+                    # else:
+                    nVal = nVal*weightVal
 
                 # 反面字FLAG，交換分數
                 if(self.__opsiteFlag == False):
@@ -95,10 +95,20 @@ class JOSPON():
                 # 語氣字加權
                 if word in self.weightingWords:
                     self.__weightingFlag = True
+                    pVal = 0.0
+                    nVal = 0.0
                 
                 # 反面字
                 if word in self.opsiteWords:
                     self.__opsiteFlag = True
+                    pVal = 0.0
+                    nVal = 0.0
+                
+                # 捨棄過低分數
+                # if(pVal <= 0.15):
+                #     pVal = 0.0
+                # if(nVal <= 0.15):
+                #     nVal = 0.0
 
                 splitDataVal_postive.append(pVal)
                 splitDataVal_negative.append(nVal)
