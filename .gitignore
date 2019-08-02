@@ -3,3 +3,4 @@ nohup.out
 wiki_*.txt
 *.zip
 .vscode/
+_*
