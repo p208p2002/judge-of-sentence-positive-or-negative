@@ -1,5 +1,6 @@
 # Judge of sentence positive or negative
 判斷語句的正反面情緒
+> 一個練習的小專案
 
 # 使用套件
 - [fxsjy/jieba](https://github.com/fxsjy/jieba)
@@ -8,14 +9,36 @@
 # 檔案描述
 Name                 |Descripition             |
 ---------------------|-------------------------|
-JOSPON.py            |程式核心邏輯              |
+JOSPON.py            |程式核心邏輯|
 mid_correction.py    |中心字校正(中心字用於與其斷詞比對)|
-main.py              |主程式，句子正反面情緒判斷  |
-testcase.py          |大量案例測試用             |
-testcase_no_ans.py   |大量案例測試用，無須答案    |
+main.py              |主程式，句子正反面情緒判斷|
+testcase.py          |大量案例測試用|
+testcase_no_ans.py   |大量案例測試用，無須答案|
+wiki_to_txt.py       |轉換維基百科資料到txt file|
+segment.py           |將維基百科資料進行斷詞|
+train.py             |訓練word2vec模型|
+word2vec_demo.py     |word2cev示例|
+
+> `wiki_to_txt.py` `segment.py` `train.py` `word2vec_demo.py`
+> 來自[zake7749/word2vec-tutorial](https://github.com/zake7749/word2vec-tutorial)
+
+# 方法概述
+- 使用word2vec model找出正向與負向詞庫中心詞彙
+- 使用中心詞彙與句子斷詞結果比對獲得正與負分數
+- 若正向分數大則判正面，反之
+
+> 程式邏輯包含一些分數加權與一些特殊規則解決一些加重語氣與雙重否定，在此不詳述
 
 # 準備
 - [下載必要檔案](https://github.com/p208p2002/judge-of-sentence-positive-or-negative/releases)，放到對應名稱的資料夾底下
+
+- 安裝套件
+```
+pipenv install --skip-lock
+```
+> 由於一些未知問題，pipenv在鎖定package可能會發生卡死，我在這裡使用`--skip-lock`跳開鎖定
+
+> 也可以自行安裝套件(參見Pipfile)
 
 # 測試
 - -1 負面答案
